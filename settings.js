@@ -14,16 +14,15 @@ limitations under the License.*/
 "use strict"
 
 // data set
-function Modification(name, filename, legacy, sheetSize) {
+function Modification(name, filename, legacy) {
     this.name = name
     this.filename = filename
     this.legacy = legacy
-    this.sheetSize = sheetSize
 }
 
 var MODIFICATIONS = {
-    "1-1-19": new Modification("Vanilla 1.1.19", "vanilla-1.1.19.json", false, [480, 512]),
-    "1-1-19x": new Modification("Vanilla 1.1.19 - Expensive", "vanilla-1.1.19-expensive.json", false, [480, 512]),
+    "1-1-19": new Modification("Vanilla 1.1.19", "vanilla-1.1.19.json", false),
+    "1-1-19x": new Modification("Vanilla 1.1.19 - Expensive", "vanilla-1.1.19-expensive.json", false),
 }
 
 var DEFAULT_MODIFICATION = "1-1-19"

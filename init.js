@@ -82,7 +82,6 @@ function loadDataRunner(modName, callback) {
     if (!mod) {
         mod = MODIFICATIONS[DEFAULT_MODIFICATION]
     }
-    spriteSheetSize = mod.sheetSize
     useLegacyCalculations = mod.legacy
     var filename = "data/" + mod.filename
     xobj.overrideMimeType("application/json")
@@ -90,6 +89,7 @@ function loadDataRunner(modName, callback) {
     xobj.onreadystatechange = function() {
         if (xobj.readyState == 4 && xobj.status == "200") {
             var data = JSON.parse(xobj.responseText)
+            spriteSheetSize = [ data["sprites"]["width"], data["sprites"]["height"] ]
             callback(data)
         }
     }
