@@ -264,6 +264,7 @@ function getRecipeGraph(data) {
         if (category != "basic-solid") {
             continue
         }
+        if (entity.name == "gold-ore") continue;
         var name = entity.name
         var props = entity.minable
         var ingredients = null
