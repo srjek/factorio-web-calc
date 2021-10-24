@@ -1186,7 +1186,7 @@ RecipeTable.prototype = {
                 groupMatch = true
             }
             if (row && groupMatch) {
-                if (sameRows && rowName != this.rowArray[i].name) {
+                if (sameRows && (i >= this.rowArray.length || rowName != this.rowArray[i].name)) {
                     sameRows = false
                 }
                 // Don't rearrange the DOM if we don't need to.
