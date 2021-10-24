@@ -21,11 +21,13 @@ function Modification(name, filename, legacy) {
 }
 
 var MODIFICATIONS = {
-    "1-1-19": new Modification("Vanilla 1.1.19", "vanilla-1.1.19.json", false),
-    "1-1-19x": new Modification("Vanilla 1.1.19 - Expensive", "vanilla-1.1.19-expensive.json", false),
+    "1-1-42": new Modification("Vanilla 1.1.42", "vanilla-1.1.42.json", false),
+    "1-1-42x": new Modification("Vanilla 1.1.42 - Expensive", "vanilla-1.1.42-expensive.json", false),
+    "ModMash-1-1-42": new Modification("ModMash 1.1.42", "ModMash-1.1.42.json", false),
+    "ModMash-1-1-42x": new Modification("ModMash 1.1.42 - Expensive", "ModMash-1.1.42-expensive.json", false),
 }
 
-var DEFAULT_MODIFICATION = "1-1-19"
+var DEFAULT_MODIFICATION = "ModMash-1-1-42"
 
 function addOverrideOptions(version) {
     var tag = "local-" + version.replace(/\./g, "-")
