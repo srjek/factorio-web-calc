@@ -308,7 +308,7 @@ function findGroups(spec, items, recipes) {
             for (var depName in deps) {
                 var dep = deps[depName]
                 var g = itemGroups[depName]
-                if (!g.isInteresting()) {
+                if (!g || !g.isInteresting()) {
                     continue
                 }
                 var pair = {"a": item, "b": dep}
