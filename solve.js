@@ -127,7 +127,11 @@ Solver.prototype = {
             delete this.disabledRecipes[recipeName]
         }
     },
-    solve: function(rates, ignore, spec) {
+    solve: function(rates, ignore, spec, instanceDisabledRecipes) {
+        var disabledRecipes = {}
+        Object.assign(disabledRecipes, this.disabledRecipes);
+        Object.assign(disabledRecipes, instanceDisabledRecipes);
+
         var unknowns = {}
         var totals = new Totals()
         for (var itemName in rates) {
@@ -145,7 +149,7 @@ Solver.prototype = {
             if (Object.keys(match).length == 0) {
                 continue
             }
-            var solution = solver.solveFor(match, spec, this.disabledRecipes)
+            var solution = solver.solveFor(match, spec, disabledRecipes)
             for (var itemName in match) {
                 delete totals.unfinished[itemName]
             }

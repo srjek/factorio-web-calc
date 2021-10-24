@@ -115,7 +115,18 @@ function itemUpdate() {
         var rate = target.getRate()
         rates[target.itemName] = rate
     }
-    globalTotals = solver.solve(rates, spec.ignore, spec)
+    var excluded_recipes = {};
+    for (var target of build_targets) {
+        var item = solver.items[target.itemName];
+        for (var j = 0; j < item.recipes.length; j++)
+        {
+            if (j != target.recipeIndex)
+            {
+                excluded_recipes[item.recipes[j].name] = true
+            }
+        }
+    }
+    globalTotals = solver.solve(rates, spec.ignore, spec, excluded_recipes)
     display()
 }
 
