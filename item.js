@@ -13,10 +13,11 @@ See the License for the specific language governing permissions and
 limitations under the License.*/
 "use strict"
 
-function Item(name, col, row, phase, group, subgroup, order) {
+function Item(name, col, row, icons, phase, group, subgroup, order) {
     this.name = name
     this.icon_col = col
     this.icon_row = row
+    this.icons = icons
     this.recipes = []
     this.uses = []
     this.phase = phase
@@ -63,7 +64,7 @@ Item.prototype = {
         var t = document.createElement("div")
         t.classList.add("frame")
         var title = document.createElement("h3")
-        var im = getImage(this, true)
+        var im = getIconSvgTooltip(this, true)
         title.appendChild(im)
         title.appendChild(new Text(formatName(this.name)))
         t.appendChild(title)
@@ -89,6 +90,7 @@ function getItem(data, items, name) {
             name,
             d.icon_col,
             d.icon_row,
+            d.icons,
             phase,
             d.group,
             d.subgroup,
@@ -107,6 +109,7 @@ function getItems(data) {
         cycleName,
         reactor.icon_col,
         reactor.icon_row,
+        null,
         "abstract",
         "production",
         "energy",

@@ -37,10 +37,11 @@ function makeIngredient(data, i, items) {
     return new Ingredient(RationalFromFloat(amount), getItem(data, items, name))
 }
 
-function Recipe(name, col, row, category, time, ingredients, products) {
+function Recipe(name, col, row, icons, category, time, ingredients, products) {
     this.name = name
     this.icon_col = col
     this.icon_row = row
+    this.icons = icons
     this.category = category
     this.time = time
     this.ingredients = ingredients
@@ -104,7 +105,7 @@ Recipe.prototype = {
         var t = document.createElement("div")
         t.classList.add("frame")
         var title = document.createElement("h3")
-        var im = getImage(this, true)
+        var im = getIconSvgTooltip(this, true)
         title.appendChild(im)
         var name = formatName(this.name)
         if (this.products.length === 1 && this.products[0].item.name === this.name && one.less(this.products[0].amount)) {
@@ -124,7 +125,7 @@ Recipe.prototype = {
                 var ing = this.products[i]
                 var p = document.createElement("div")
                 p.classList.add("product")
-                p.appendChild(getImage(ing.item, true))
+                p.appendChild(getIconSvgTooltip(ing.item, true))
                 var count = document.createElement("span")
                 count.classList.add("count")
                 count.textContent = ing.amount.toDecimal()
@@ -144,7 +145,7 @@ Recipe.prototype = {
             t.appendChild(document.createElement("br"))
             var p = document.createElement("div")
             p.classList.add("product")
-            p.appendChild(getImage(ing.item, true))
+            p.appendChild(getIconSvgTooltip(ing.item, true))
             t.appendChild(p)
             t.appendChild(new Text("\u00A0" + ing.amount.toDecimal() + " \u00d7 " + formatName(ing.item.name)))
         }
@@ -162,24 +163,24 @@ function makeRecipe(data, d, items) {
     for (var i=0; i < d.ingredients.length; i++) {
         ingredients.push(makeIngredient(data, d.ingredients[i], items))
     }
-    return new Recipe(d.name, d.icon_col, d.icon_row, d.category, time, ingredients, products)
+    return new Recipe(d.name, d.icon_col, d.icon_row, d.icons, d.category, time, ingredients, products)
 }
 
 function ResourceRecipe(item) {
-    Recipe.call(this, item.name, item.icon_col, item.icon_row, null, zero, [], [new Ingredient(one, item)])
+    Recipe.call(this, item.name, item.icon_col, item.icon_row, item.icons, null, zero, [], [new Ingredient(one, item)])
 }
 ResourceRecipe.prototype = Object.create(Recipe.prototype)
 ResourceRecipe.prototype.makesResource = function() {
     return true
 }
 
-function MiningRecipe(name, col, row, category, hardness, mining_time, ingredients, products) {
+function MiningRecipe(name, col, row, icons, category, hardness, mining_time, ingredients, products) {
     this.hardness = hardness
     this.mining_time = mining_time
     if (!ingredients) {
         ingredients = []
     }
-    Recipe.call(this, name, col, row, category, zero, ingredients, products)
+    Recipe.call(this, name, col, row, icons, category, zero, ingredients, products)
 }
 MiningRecipe.prototype = Object.create(Recipe.prototype)
 MiningRecipe.prototype.makesResource = function() {
@@ -201,6 +202,7 @@ function getRecipeGraph(data) {
         "water",
         water.icon_col,
         water.icon_row,
+        null,
         "water",
         RationalFromFloats(1, 1200),
         [],
@@ -211,6 +213,7 @@ function getRecipeGraph(data) {
         "nuclear-reactor-cycle",
         reactor.icon_col,
         reactor.icon_row,
+        null,
         "nuclear",
         RationalFromFloat(200),
         [new Ingredient(one, getItem(data, items, "uranium-fuel-cell"))],
@@ -224,6 +227,7 @@ function getRecipeGraph(data) {
         "rocket-launch",
         rocket.icon_col,
         rocket.icon_row,
+        null,
         "rocket-launch",
         one,
         [
@@ -236,6 +240,7 @@ function getRecipeGraph(data) {
         "steam",
         steam.icon_col,
         steam.icon_row,
+        null,
         "boiler",
         RationalFromFloats(1, 60),
         [new Ingredient(one, getItem(data, items, "water"))],
@@ -282,6 +287,7 @@ function getRecipeGraph(data) {
             name,
             entity.icon_col,
             entity.icon_row,
+            entity.icons,
             "mining-" + category,
             hardness,
             RationalFromFloat(props.mining_time),

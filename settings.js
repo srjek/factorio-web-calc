@@ -212,7 +212,7 @@ function renderMinimumAssembler(settings) {
         (d, i) => String(i + 1) === min,
         (d, i) => changeMin(String(i + 1)),
     )
-    labels.append(d => getImage(d, false, dropdown.node()))
+    labels.append(d => getIconSvgTooltip(d, false, dropdown.node()))
     cell.replaceChild(node, oldNode)
 }
 
@@ -247,7 +247,7 @@ function renderFurnace(settings) {
         d => d.name === furnaceName,
         changeFurnace,
     )
-    labels.append(d => getImage(d, false, dropdown.node()))
+    labels.append(d => getIconSvgTooltip(d, false, dropdown.node()))
     cell.replaceChild(node, oldNode)
 }
 
@@ -275,7 +275,7 @@ function renderFuel(settings) {
         changeFuel,
     )
     labels.append(d => {
-        let im = getImage(d, false, dropdown.node())
+        let im = getIconSvgTooltip(d, false, dropdown.node())
         im.title += " (" + d.valueString() + ")"
         return im
     })
@@ -332,7 +332,7 @@ function renderOil(settings) {
         d => d.priority === oil,
         changeOil,
     )
-    labels.append(d => getImage(solver.recipes[d.name], false, dropdown.node()))
+    labels.append(d => getIconSvgTooltip(solver.recipes[d.name], false, dropdown.node()))
     cell.replaceChild(node, oldNode)
 }
 
@@ -390,7 +390,7 @@ function renderBelt(settings) {
         d => d.name === preferredBelt,
         changeBelt,
     )
-    labels.append(d => getImage(new BeltIcon(solver.items[d.name], d.speed), false, dropdown.node()))
+    labels.append(d => getIconSvgTooltip(new BeltIcon(solver.items[d.name], d.speed), false, dropdown.node()))
     cell.replaceChild(node, oldNode)
 }
 

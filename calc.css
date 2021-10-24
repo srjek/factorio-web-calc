@@ -68,6 +68,11 @@ img.icon {
     width: 32px;
     vertical-align: middle;
 }
+svg.icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 /* "recent changes" box */
 .changecell {
     vertical-align: top;
@@ -195,6 +200,9 @@ tr.group-row td.leftmost {
     border-left: 1px solid var(--light);
 }
 tr.ignore img.display {
+    opacity: 0.2;
+}
+tr.ignore svg.display {
     opacity: 0.2;
 }
 tr.no-mods td.module * {

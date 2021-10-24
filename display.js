@@ -147,6 +147,7 @@ function ItemIcon(item, canIgnore) {
     }
     this.icon_col = item.icon_col
     this.icon_row = item.icon_row
+    this.icons = item.icons
 }
 ItemIcon.prototype = {
     constructor: ItemIcon,
@@ -177,7 +178,7 @@ BeltIcon.prototype = {
         var t = document.createElement("div")
         t.classList.add("frame")
         var title = document.createElement("h3")
-        var im = getImage(this, true)
+        var im = getIconSvgTooltip(this, true)
         title.appendChild(im)
         title.appendChild(new Text(formatName(this.name)))
         t.appendChild(title)
@@ -203,7 +204,7 @@ class BeltCells {
         while (this.beltCell.hasChildNodes()) {
             this.beltCell.removeChild(this.beltCell.lastChild)
         }
-        let beltImage = getImage(new BeltIcon())
+        let beltImage = getIconSvgTooltip(new BeltIcon())
         this.beltCell.appendChild(beltImage)
         this.beltCell.appendChild(new Text(" \u00d7"))
         let beltCount = rate.div(preferredBeltSpeed)
@@ -218,7 +219,7 @@ class PipeCells {
         pipeCell.classList.add("pad-right")
         row.appendChild(pipeCell)
         let pipeItem = solver.items["pipe"]
-        pipeCell.appendChild(getImage(pipeItem, true))
+        pipeCell.appendChild(getIconSvgTooltip(pipeItem, true))
         this.pipeNode = document.createElement("tt")
         pipeCell.appendChild(this.pipeNode)
     }
@@ -267,7 +268,7 @@ function ItemRow(row, item, canIgnore) {
     var nameCell = document.createElement("td")
     nameCell.className = "right-align"
     this.itemIcon = new ItemIcon(item, canIgnore)
-    var im = getImage(this.itemIcon)
+    var im = getIconSvgTooltip(this.itemIcon)
     im.classList.add("display")
     if (canIgnore) {
         if (spec.ignore[item.name]) {
@@ -344,7 +345,7 @@ class UsageRow {
         this.node.classList.add("breakdown-row", "display-row")
 
         let arrowCell = document.createElement("td")
-        arrowCell.appendChild(getImage(item))
+        arrowCell.appendChild(getIconSvgTooltip(item))
         let arrowSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         arrowSVG.classList.add("usage-arrow")
         arrowSVG.setAttribute("viewBox", "0 0 18 16")
@@ -355,7 +356,7 @@ class UsageRow {
         arrowUse.setAttribute("href", "images/icons.svg#rightarrow")
         arrowSVG.appendChild(arrowUse)
 
-        arrowCell.appendChild(getImage(destRecipe))
+        arrowCell.appendChild(getIconSvgTooltip(destRecipe))
         this.node.appendChild(arrowCell)
 
         let rateCell = document.createElement("td")
@@ -614,13 +615,13 @@ class FactoryCountCells {
             return {count}
         }
         let factory = spec.getFactory(recipe)
-        var image = getImage(factory.factory)
+        var image = getIconSvgTooltip(factory.factory)
         image.classList.add("display")
         while (this.factoryCell.hasChildNodes()) {
             this.factoryCell.removeChild(this.factoryCell.lastChild)
         }
         if (recipe.displayGroup !== null || recipe.name !== recipe.products[0].item.name) {
-            this.factoryCell.appendChild(getImage(recipe))
+            this.factoryCell.appendChild(getIconSvgTooltip(recipe))
             this.factoryCell.appendChild(new Text(" : "))
         }
         this.factoryCell.appendChild(image)
@@ -706,7 +707,7 @@ FactoryRow.prototype = {
         if (power.fuel === "electric") {
             this.powerNode.textContent = alignPower(power.power)
         } else if (power.fuel === "chemical") {
-            var fuelImage = getImage(preferredFuel)
+            var fuelImage = getIconSvgTooltip(preferredFuel)
             this.fuelCell.appendChild(fuelImage)
             this.fuelCell.appendChild(new Text(" \u00d7"))
             this.powerNode.textContent = alignRate(power.power.div(preferredFuel.value)) + "/" + rateName

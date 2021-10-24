@@ -20,7 +20,7 @@ function getSolutionHeader(matrixSolver, costHeader) {
         var item = items[i]
         var cell = document.createElement("th")
         cell.appendChild(new Text("s"))
-        cell.appendChild(getImage(item))
+        cell.appendChild(getIconSvgTooltip(item))
         row.appendChild(cell)
     }
     var cell = document.createElement("th")
@@ -30,7 +30,7 @@ function getSolutionHeader(matrixSolver, costHeader) {
     for (var i = 0; i < recipes.length; i++) {
         var obj = recipes[i]
         var cell = document.createElement("th")
-        cell.appendChild(getImage(obj))
+        cell.appendChild(getIconSvgTooltip(obj))
         row.appendChild(cell)
     }
     cell = document.createElement("th")
@@ -59,7 +59,7 @@ function renderMatrix(matrixSolver, A, rowIcons) {
             var td = document.createElement("td")
             if (j < matrixSolver.recipes.length) {
                 var recipes = matrixSolver.recipes[j]
-                td.appendChild(getImage(recipes))
+                td.appendChild(getIconSvgTooltip(recipes))
             } else if (j == A.rows - 2) {
                 td.appendChild(new Text("tax"))
             } else if (j == A.rows - 1) {

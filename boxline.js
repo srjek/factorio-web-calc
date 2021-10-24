@@ -148,22 +148,12 @@ function renderBoxGraph({nodes, links}, direction, ignore, sheetWidth, sheetHeig
         .attr("fill", d => d3.color(colorList[itemColors.get(d.item) % 10]).darker())
         .attr("fill-opacity", 0)
         .attr("stroke", "none")
-    edgeLabels.append("svg")
-        .attr("viewBox", d => imageViewBox(d.item))
-        .attr("x", d => {
-            let edge = d.label
-            return edge.x - (edge.width/2) + 5 + 0.5
-        })
-        .attr("y", d => {
-            let edge = d.label
-            return edge.y - iconSize/2 + 0.5
-        })
-        .attr("width", iconSize)
-        .attr("height", iconSize)
-        .append("image")
-            .attr("xlink:href", "images/sprite-sheet-" + sheet_hash + ".png")
-            .attr("width", sheetWidth)
-            .attr("height", sheetHeight)
+    edgeLabels.each((d, i, arr) => {
+        let edge = d.label;
+        var x = edge.x - (edge.width/2) + 5 + 0.5;
+        var y = edge.y - iconSize/2 + 0.5;
+        arr[i].append( getIconSvg(d.item, x, y, iconSize, false) );
+    })
     edgeLabels.append("text")
         .attr("x", d => {
             let edge = d.label

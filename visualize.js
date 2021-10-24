@@ -248,17 +248,11 @@ function renderNode(selection, margin, justification, ignore, sheetWidth, sheetH
             .attr("text-anchor", "middle")
             .text(d => d.text())
     let labeledNode = selection.filter(d => d.rate !== null)
-    labeledNode.append("svg")
-        .attr("viewBox", d => imageViewBox(d.recipe))
-        .attr("x", d => d.labelX + margin + 0.5)
-        .attr("y", d => (d.y0 + d.y1) / 2 - iconSize/2 + 0.5)
-        .attr("width", iconSize)
-        .attr("height", iconSize)
-        .append("image")
-            .classed("ignore", d => ignore[d.recipe.name])
-            .attr("xlink:href", "images/sprite-sheet-" + sheet_hash + ".png")
-            .attr("width", sheetWidth)
-            .attr("height", sheetHeight)
+    labeledNode.each((d, i, arr) => {
+        var x = d.labelX + margin + 0.5;
+        var y = (d.y0 + d.y1) / 2 - iconSize/2 + 0.5;
+        arr[i].append( getIconSvg(d.recipe, x, y, iconSize, ignore[d.recipe.name]) );
+    })
     labeledNode.append("text")
         .attr("x", d => d.labelX + iconSize + (d.factory === null ? 0 : colonWidth + iconSize) + margin + 3)
         .attr("y", d => (d.y0 + d.y1) / 2)
@@ -275,16 +269,11 @@ function renderNode(selection, margin, justification, ignore, sheetWidth, sheetH
         .attr("cx", d => d.labelX + iconSize + colonWidth/2 + margin)
         .attr("cy", d => (d.y0 + d.y1) / 2 + 4)
         .attr("r", 1)
-    factoryNode.append("svg")
-        .attr("viewBox", d => imageViewBox(d.factory))
-        .attr("x", d => d.labelX + iconSize + colonWidth + margin + 0.5)
-        .attr("y", d => (d.y0 + d.y1) / 2 - iconSize/2 + 0.5)
-        .attr("width", iconSize)
-        .attr("height", iconSize)
-        .append("image")
-            .attr("xlink:href", "images/sprite-sheet-" + sheet_hash + ".png")
-            .attr("width", sheetWidth)
-            .attr("height", sheetHeight)
+    factoryNode.each((d, i, arr) => {
+        var x = d.labelX + iconSize + colonWidth + margin + 0.5;
+        var y = (d.y0 + d.y1) / 2 - iconSize/2 + 0.5;
+        arr[i].append( getIconSvg(d.factory, x, y, iconSize, false) );
+    })
 }
 
 const iconSize = 32
@@ -601,21 +590,15 @@ function renderGraph(totals, ignore) {
     link.append("title")
         .text(linkTitle)
     let extraLinkLabel = link.filter(d => d.extra)
-    let linkIcon = extraLinkLabel.append("svg")
-        .attr("viewBox", d => imageViewBox(d.item))
-        .attr("x", d => d.source.x1 + 2.25)
-        .attr("y", d => d.y0 - iconSize/4 + 0.25)
-        .attr("width", iconSize/2)
-        .attr("height", iconSize/2)
-    linkIcon.append("image")
-            .attr("xlink:href", "images/sprite-sheet-" + sheet_hash + ".png")
-            .attr("width", sheetWidth)
-            .attr("height", sheetHeight)
-    if (direction === "down") {
-        linkIcon
-            .attr("x", d => d.y0 - iconSize/4 + 0.25)
-            .attr("y", d => d.source.y1 + 2.25)
-    }
+    extraLinkLabel.each((d, i, arr) => {
+        var x = d.source.x1 + 2.25;
+        var y = d.y0 - iconSize/4 + 0.25;
+        if (direction === "down") {
+            x = d.y0 - iconSize/4 + 0.25;
+            y = d.source.y1 + 2.25;
+        }
+        arr[i].append( getIconSvg(d.item, x, y, iconSize/2, false) );
+    });
     let linkLabel = link.append("text")
         .attr("x", d => d.source.x1 + 2 + (d.extra ? 16 : 0))
         .attr("y", d => d.y0)

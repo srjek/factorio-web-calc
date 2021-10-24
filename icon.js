@@ -40,6 +40,121 @@ function getImage(obj, suppressTooltip, tooltipTarget) {
     return im
 }
 
+function getIconSvgTooltip(obj, suppressTooltip, tooltipTarget)
+{
+    var svg = getIconSvg(obj, null, null, PX_WIDTH, false);
+
+    svg.classList.add("icon")
+
+    if (tooltipsEnabled && obj.renderTooltip && !suppressTooltip) {
+        addTooltip(svg, obj, tooltipTarget)
+    } else {
+        var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        title.textContent = obj.name;
+        svg.append(title);
+    }
+
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", obj.name);
+
+    return svg;
+}
+
+var GLOBAL_COUNTER_SRJ = 0;
+function getIconSvg(d, x, y, width, ignore)
+{
+    var icons = d.icons;
+    if (icons == null)
+    {
+        icons = [ d ]
+    }
+
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    if (x != null)
+    {
+        svg.setAttribute("x", x);
+    }
+    if (y != null)
+    {
+        svg.setAttribute("y", y);
+    }
+    svg.setAttribute("width", width);
+    svg.setAttribute("height", width);
+    if (ignore)
+    {
+        svg.classList.add("ignore");
+    }
+
+    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    svg.append(defs);
+
+    for (var icon of icons)
+    {
+        if (icon.tint != null)
+        {
+            var filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+            filter.setAttribute("id", "icon_filter" + GLOBAL_COUNTER_SRJ);
+
+            var r = icon.tint.r / 1.0;
+            var g = icon.tint.g / 1.0;
+            var b = icon.tint.b / 1.0;
+
+            var matrix = document.createElementNS("http://www.w3.org/2000/svg", "feColorMatrix");
+            matrix.setAttribute("in", "SourceGraphic");
+            matrix.setAttribute("values",
+                icon.tint.r + " 0 0 0 0 \
+                    0 " + icon.tint.g + " 0 0 0 \
+                    0 0 " + icon.tint.b + " 0 0 \
+                    0 0 0 " + icon.tint.a + " 0");
+            filter.append(matrix);
+
+            defs.append(filter);
+        }
+
+        var inner_g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        if (icon.tint != null)
+        {
+            inner_g.setAttribute("filter", "url(#icon_filter" + GLOBAL_COUNTER_SRJ + ")");
+            GLOBAL_COUNTER_SRJ += 1;
+        }
+        var transform = "";
+        if (icon.scale != null || icon.shift != null)
+        {
+            var x = 0; var y = 0;
+            var scale = 1;
+            if (icon.shift != null)
+            {
+                x += icon.shift[0];
+                y += icon.shift[1];
+            }
+            if (icon.scale != null)
+            {
+                scale = icon.scale / (32 / icon.icon_size);
+                x -= 32 * (scale - 1) / 2;
+                y -= 32 * (scale - 1) / 2;
+            }
+            var transform = "translate(" + x + ", " + y + ")";
+            if (icon.scale != null)
+            {
+                transform += " scale(" + scale + ") ";
+            }
+            inner_g.setAttribute("transform", transform);
+        }
+
+        var inner_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        inner_svg.setAttribute("viewBox", imageViewBox(icon));
+
+        var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "images/sprite-sheet-" + sheet_hash + ".png");
+
+        inner_svg.append(image);
+        inner_g.append(inner_svg);
+        svg.append(inner_g);
+    }
+
+    return svg;
+}
+
 function addTooltip(im, obj, target) {
     var node = obj.renderTooltip()
     return new Tooltip(im, node, target)

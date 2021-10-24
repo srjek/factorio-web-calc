@@ -54,7 +54,7 @@ Module.prototype = {
         var t = document.createElement("div")
         t.classList.add("frame")
         var title = document.createElement("h3")
-        var im = getImage(this, true)
+        var im = getIconSvgTooltip(this, true)
         title.appendChild(im)
         title.appendChild(new Text(formatName(this.name)))
         t.appendChild(title)
@@ -138,7 +138,7 @@ function moduleDropdown(selection, name, selected, callback, filter) {
             noModImage.title = NO_MODULE
             return noModImage
         } else {
-            return getImage(d, false, dropdown.node())
+            return getIconSvgTooltip(d, false, dropdown.node())
         }
     })
     let inputs = {}
